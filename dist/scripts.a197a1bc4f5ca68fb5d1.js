@@ -1,0 +1,1 @@
+$(document).ready(function(){showAlertMessage=(()=>{$("#message").fadeIn(3e3).fadeOut(3e3)}),openModalDialogInvalid=(()=>{alert("Invalid ID")})});
