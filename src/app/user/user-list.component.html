@@ -1,0 +1,59 @@
+<h2>All Users</h2>
+
+<div *ngIf="!isLoaded">
+    <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+</div>
+
+<div class="container" [@listAnimation] *ngIf="isLoaded">
+    <table class="table table-hover">
+        <tr>
+            <td></td>
+            <td><input type="text" [(ngModel)]="searchFilter.name" placeholder="filter by name"></td>
+            <td></td>
+            <td><input type="text" [(ngModel)]="searchFilter.city" placeholder="filter by city"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th (click)="setOrder('id')">ID</th>
+            <th (click)="setOrder('name')">NAME</th>
+            <th (click)="setOrder('age')">AGE</th>
+            <th (click)="setOrder('city')">CITY</th>
+            <th></th>
+        </tr>
+        <tr *ngFor="let user of users | filterBy: searchFilter | orderBy:orderColumn : reverse |
+        paginate: { itemsPerPage: itemsPerPage, currentPage: page} ">
+            <td>{{user.id}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.age}}</td>
+            <td>{{user.city}}</td>
+            <td>
+                <input type="button" value="Details" class="btn btn-info" (click)="viewDetails(user)" />                
+                <input type="button" value="Delete" class="btn btn-warning" data-toggle="modal"
+                    data-target="#ModalDelete" (click)="selectUser(user)" /> </td>
+        </tr>
+    </table>
+    <div class="center">
+        <pagination-controls (pageChange)="page=$event">
+        </pagination-controls>
+    </div>
+    <select class="form-control" [ngModel]="page" (ngModelChange)="page = $event">
+        <option *ngFor="let pageOption of pagesArray()" [ngValue]="pageOption">{{pageOption}}</option>
+    </select>
+</div>
+<div class="modal fade" id="ModalDelete" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete User</h4>
+            </div>
+            <div class="modal-body">
+                <p>Delete user {{selectedUser? selectedUser.name : ''}}?</p><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="remove()">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
